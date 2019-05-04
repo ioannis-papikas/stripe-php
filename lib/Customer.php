@@ -63,6 +63,7 @@ class Customer extends ApiResource
 
     const PATH_SOURCES = '/sources';
     const PATH_TAX_IDS = '/tax_ids';
+    const PATH_TRANSACTIONS = '/customer_balance_transactions';
 
     /**
      * @param array|null $params
@@ -263,5 +264,42 @@ class Customer extends ApiResource
     public static function allTaxIds($id, $params = null, $opts = null)
     {
         return self::_allNestedResources($id, static::PATH_TAX_IDS, $params, $opts);
+    }
+
+    /**
+     * @param string|null $id The ID of the customer on which to create the transaction.
+     * @param array|null $params
+     * @param array|string|null $opts
+     *
+     * @return ApiResource
+     */
+    public static function createTransaction($id, $params = null, $opts = null)
+    {
+        return self::_createNestedResource($id, static::PATH_TRANSACTIONS, $params, $opts);
+    }
+
+    /**
+     * @param string|null $id The ID of the customer to which the transaction belongs.
+     * @param string|null $transactionId The ID of the transaction to retrieve.
+     * @param array|null $params
+     * @param array|string|null $opts
+     *
+     * @return ApiResource
+     */
+    public static function retrieveTransaction($id, $transactionId, $params = null, $opts = null)
+    {
+        return self::_retrieveNestedResource($id, static::PATH_TRANSACTIONS, $transactionId, $params, $opts);
+    }
+
+    /**
+     * @param string|null $id The ID of the customer on which to retrieve the transactions.
+     * @param array|null $params
+     * @param array|string|null $opts
+     *
+     * @return Collection The list of transactions.
+     */
+    public static function allTransactions($id, $params = null, $opts = null)
+    {
+        return self::_allNestedResources($id, static::PATH_TRANSACTIONS, $params, $opts);
     }
 }

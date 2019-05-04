@@ -7,6 +7,7 @@ class CustomerTest extends TestCase
     const TEST_RESOURCE_ID = 'cus_123';
     const TEST_SOURCE_ID = 'ba_123';
     const TEST_TAX_ID_ID = 'txi_123';
+    const TEST_TRANSACTION_ID = 'cbtxn_123';
 
     public function testIsListable()
     {
@@ -302,6 +303,37 @@ class CustomerTest extends TestCase
             '/v1/customers/' . self::TEST_RESOURCE_ID . '/tax_ids'
         );
         $resources = Customer::allTaxIds(self::TEST_RESOURCE_ID);
+        $this->assertTrue(is_array($resources->data));
+    }
+
+    public function testCanCreateTransaction()
+    {
+        $this->expectsRequest(
+            'post',
+            '/v1/customers/' . self::TEST_RESOURCE_ID . '/customer_balance_transactions'
+        );
+        $resource = Customer::createTransaction(self::TEST_RESOURCE_ID, [
+            "amount" => 1234,
+            "currency" => "usd",
+        ]);
+    }
+
+    public function testCanRetrieveTransaction()
+    {
+        $this->expectsRequest(
+            'get',
+            '/v1/customers/' . self::TEST_RESOURCE_ID . '/customer_balance_transactions/' . self::TEST_TRANSACTION_ID
+        );
+        $resource = Customer::retrieveTransaction(self::TEST_RESOURCE_ID, self::TEST_TRANSACTION_ID);
+    }
+
+    public function testCanListTransactions()
+    {
+        $this->expectsRequest(
+            'get',
+            '/v1/customers/' . self::TEST_RESOURCE_ID . '/customer_balance_transactions'
+        );
+        $resources = Customer::allTransactions(self::TEST_RESOURCE_ID);
         $this->assertTrue(is_array($resources->data));
     }
 }
